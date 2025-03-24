@@ -1,11 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import { useState } from "react";
 
 export default function App() {
+  const [markers, setMarkers] = useState([]);
+
+  const [region, setRegion] = useState({
+    latitude: 55,
+    longitude: 12,
+    latitudeDelta: 20,
+    longitudeDelta: 20,
+  });
+
+  function addMarker(data) {
+    const { latitude, longitude } = data.nativeEvent.coordinate;
+    const newMarker = {
+      coordinate: { latitude, longitude },
+      key: Date.now,
+      title: "Great place",
+    };
+    setMarkers([...markers, newMarker]);
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <MapView style={styles.map} region={region} onLongPress={addMarker}>
+        {markers.map((marker) => (
+          <Marker
+            coordinate={marker.coordinate}
+            key={marker.key}
+            title={marker.title}
+          />
+        ))}
+      </MapView>
     </View>
   );
 }
@@ -13,8 +41,10 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+
+  map: {
+    width: "100%",
+    height: "100%",
   },
 });
