@@ -17,7 +17,7 @@ export default function App() {
     const { latitude, longitude } = data.nativeEvent.coordinate;
     const newMarker = {
       coordinate: { latitude, longitude },
-      key: Date.now,
+      key: Date.now(),
       title: "Great place",
     };
     setMarkers([...markers, newMarker]);
